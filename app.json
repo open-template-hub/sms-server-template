@@ -1,0 +1,24 @@
+{
+  "name": "sms-server-template",
+  "description": "SMS Server Template is a generic open-source SMS Server that has a simple yet powerful design to connect your business with third-party file storage provider companies (like AWS S3).",
+  "website": "https://opentemplatehub.com/product/server/sms-server-template",
+  "repository": "https://github.com/open-template-hub/sms-server-template",
+  "logo": "https://raw.githubusercontent.com/open-template-hub/open-template-hub.github.io/master/assets/logo/server/sms-server-logo.png",
+  "keywords": [
+    "file-sorage",
+    "download",
+    "upload",
+    "server",
+    "template",
+    "nodejs",
+    "typescript",
+    "mongodb",
+    "mongoose",
+    "aws",
+    "aws-s3",
+    "amazon",
+    "amazon-web-services",
+    "s3",
+    "open template hub"
+  ]
+}
