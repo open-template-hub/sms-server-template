@@ -5,7 +5,7 @@
 </p>
 
 <h1 align="center">
-Open Template Hub - SMS Server Template v1
+Open Template Hub - SMS Server Template v3
 </h1>
 
 [![License](https://img.shields.io/github/license/open-template-hub/sms-server-template?color=43b043&style=for-the-badge)](LICENSE)
@@ -18,8 +18,6 @@ Open Template Hub - SMS Server Template v1
 SMS Server Template is a generic open-source sms server that has a simple yet powerful design to connect your business with third-party sms service providers (like Twilio, Amazon SNS).
 
 ## Ways to Begin
-
-npm install --save-dev @types/node
 
 ### 1. Express Deploy
 

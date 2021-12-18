@@ -4,10 +4,10 @@ if [ ! -f .env ]; then
   echo "Generating .env file.."
   touch .env
   {
-    echo "PORT=4004"
+    echo "PORT=4007"
 
     echo "PROJECT=OTH"
-    echo "MODULE=FileStorageServer"
+    echo "MODULE=SmsServer"
     echo "ENVIRONMENT=Local"
 
     echo "MONGODB_URI={Database Connection Url}"
@@ -19,7 +19,7 @@ if [ ! -f .env ]; then
     echo "CLOUDAMQP_APIKEY={MQ Api Key}"
     echo "CLOUDAMQP_URL={MQ Connection Url}"
 
-    echo "FILE_SERVER_QUEUE_CHANNEL=oth_file_queue"
+    echo "SMS_SERVER_QUEUE_CHANNEL=oth_sms_queue"
     echo "ORCHESTRATION_SERVER_QUEUE_CHANNEL=oth_orchestration_queue"
 
     echo "ACCESS_TOKEN_SECRET={Access Token Secret}"
