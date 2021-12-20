@@ -13,9 +13,6 @@ if [ ! -f .env ]; then
     echo "MONGODB_URI={Database Connection Url}"
     echo "MONGODB_CONNECTION_LIMIT={MongoDB Connection Limit}"
 
-    echo "DATABASE_URL={Database Connection Url}"
-    echo "POSTGRESQL_CONNECTION_LIMIT={Postgresql Connection Limit}"
-
     echo "CLOUDAMQP_APIKEY={MQ Api Key}"
     echo "CLOUDAMQP_URL={MQ Connection Url}"
 
