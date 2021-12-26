@@ -1,7 +1,7 @@
 ### Create Payment
 POST http://localhost:4007/sms/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1lcnQiLCJyb2xlIjpudWxsLCJpYXQiOjE2NDA1MzI0NjksImV4cCI6MTY0MDUzNjA2OX0.MYE3bKyk34anbRh6Yv1zCAJw-31hQR1K9quMuTvHxrs
+Authorization: Bearer token
 
 # +13306484544 (from)
 {
