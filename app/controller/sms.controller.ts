@@ -7,6 +7,7 @@ import { Sms } from '../interface/sms.interface';
 import { ServiceClient } from '../interface/service-client.interface';
 import { ServiceProviderRepository } from '../repository/service-provider.repository';
 import { SmsServiceWrapper } from '../wrapper/sms-service.wrapper';
+import { v4 as uuidv4 } from 'uuid';
 
 export class SmsController {
   /**
@@ -15,14 +16,14 @@ export class SmsController {
    * @param sms sms
    */
   sendSms = async (context: Context, sms: Sms): Promise<any> => {
+    sms.id = uuidv4()
+
     const serviceClient = await this.getServiceClient(
       context.mongodb_provider,
       context.serviceKey
     );
 
-    sms = await serviceClient.service.send(serviceClient.client, sms);
-
-    return sms;
+    return await serviceClient.service.send(serviceClient.client, sms);
   };
 
   /**
@@ -36,9 +37,9 @@ export class SmsController {
   ): Promise<ServiceClient> => {
     const serviceConfig = await this.getServiceConfig(provider, serviceKey);
 
-    const service = new SmsServiceWrapper(serviceConfig.payload.service);
+    const service = new SmsServiceWrapper(serviceConfig.key);
 
-    const client = await service.initializeClient(serviceConfig);
+    const client = await service.initializeClient(serviceConfig.payload);
 
     if (client === undefined)
       throw new Error('Client is not initialized correctly');

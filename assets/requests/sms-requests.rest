@@ -1,0 +1,13 @@
+### Create Payment
+POST http://localhost:4007/sms/me
+Content-Type: application/json
+Authorization: Bearer token
+
+{
+  "key": "Twilio",
+  "payload": {
+    "to": "",
+    "from": "",
+    "message": "test message"
+  }
+}

@@ -3,7 +3,10 @@
  */
 
 export interface Sms {
-  id: number;
+  id: string;
   message: string;
-  created_time: Date;
+  from: string;
+  to: string;
+  created_time?: Date;
+  status?: string;
 }
