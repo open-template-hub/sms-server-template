@@ -23,9 +23,7 @@ export class SmsController {
       context.serviceKey
     );
 
-    const smsResponse = await serviceClient.service.send(serviceClient.client, sms);
-
-    return smsResponse;
+    return await serviceClient.service.send(serviceClient.client, sms);
   };
 
   /**
