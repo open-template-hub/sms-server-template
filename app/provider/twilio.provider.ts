@@ -1,10 +1,21 @@
-import { Twilio } from 'twilio';
 import { SmsService } from '../interface/sms-service.interface';
 import { Sms } from '../interface/sms.interface';
 
-export class TwilioService implements SmsService {
-  private client?: Twilio
+class TwilioPackage {
+  static Twilio: any;
 
+  public static getInstance() {
+    if ( !this.Twilio ) {
+      const { Twilio } = require( 'twilio' );
+      this.Twilio = Twilio;
+      console.info( 'Initializing Twilio Package. Config: ', this.Twilio );
+    }
+
+    return this.Twilio;
+  }
+}
+
+export class TwilioService implements SmsService {
   constructor(private payload: any = null) {}
 
   /**
@@ -12,11 +23,9 @@ export class TwilioService implements SmsService {
    * @param providerConfig provider config
    */
   async initializeClient(providerConfig: any): Promise<any> {
-    let client: Twilio
-    client = new Twilio( providerConfig.accountId, providerConfig.authToken )
+    const Twilio: any = TwilioPackage.getInstance();
 
-    this.client = client
-    return client
+    return new Twilio( providerConfig.accountId, providerConfig.authToken )
   }
 
   /**
@@ -25,7 +34,7 @@ export class TwilioService implements SmsService {
    * @param sms sms
    */
   async send(client: any, sms: Sms): Promise<Sms> {
-    const response = await this.client?.messages.create( {
+    const response = await client.messages.create( {
       body: sms.message,
       from: sms.from,
       to: sms.to

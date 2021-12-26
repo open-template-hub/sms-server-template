@@ -3,7 +3,7 @@
  */
 
 export interface Sms {
-  id: number;
+  id: string;
   message: string;
   from: string;
   to: string;
