@@ -3,7 +3,6 @@ POST http://localhost:4007/sms/me
 Content-Type: application/json
 Authorization: Bearer token
 
-# +13306484544 (from)
 {
   "key": "Twilio",
   "payload": {
