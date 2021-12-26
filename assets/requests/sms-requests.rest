@@ -7,7 +7,6 @@ Authorization: Bearer token
 {
   "key": "Twilio",
   "payload": {
-    "id": 1,
     "to": "",
     "from": "",
     "message": "test message"
