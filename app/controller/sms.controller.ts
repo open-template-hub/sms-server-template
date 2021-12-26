@@ -20,9 +20,9 @@ export class SmsController {
       context.serviceKey
     );
 
-    sms = await serviceClient.service.send(serviceClient.client, sms);
+    const smsResponse = await serviceClient.service.send(serviceClient.client, sms);
 
-    return sms;
+    return smsResponse;
   };
 
   /**
@@ -36,9 +36,9 @@ export class SmsController {
   ): Promise<ServiceClient> => {
     const serviceConfig = await this.getServiceConfig(provider, serviceKey);
 
-    const service = new SmsServiceWrapper(serviceConfig.payload.service);
+    const service = new SmsServiceWrapper(serviceConfig.key);
 
-    const client = await service.initializeClient(serviceConfig);
+    const client = await service.initializeClient(serviceConfig.payload);
 
     if (client === undefined)
       throw new Error('Client is not initialized correctly');
