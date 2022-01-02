@@ -43,7 +43,10 @@ export class TwilioService implements SmsService {
     if( response ) {
       sms.created_time = response.dateCreated
       sms.status = response.status
+      // TODO: if twilio response has id, create external_id
     }
+
+
 
     return sms
   }

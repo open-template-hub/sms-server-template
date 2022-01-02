@@ -5,5 +5,5 @@
 export interface ServiceProvider {
   key: string;
   description: string;
-  payload: any;
+  payload: any; // TODO: add from: default to send direct message
 }

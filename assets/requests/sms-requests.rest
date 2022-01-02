@@ -1,13 +1,29 @@
-### Create Payment
+### Send Sms
 POST http://localhost:4007/sms/me
 Content-Type: application/json
 Authorization: Bearer token
 
 {
-  "key": "Twilio",
+  "messageKey": "2FACodeSend",
+  "languageCode": "en",
+  "to": "",
   "payload": {
-    "to": "",
-    "from": "",
-    "message": "test message"
+    "username": "mert",
+    "twoFactorCode": "422244"
   }
 }
+
+### Create Preconfigured Message
+POST http://localhost:4007/sms/preconfigured-message
+Content-Type: application/json
+Authorization: Bearer token
+
+{
+  "key": "2FACodeSend",
+  "languageCode": "en",
+  "message": "Hello {{username}}, here your 2FA code {{twoFactorCode}}",
+  "from": ,
+  "providerKey": "Twilio"
+}
+
+

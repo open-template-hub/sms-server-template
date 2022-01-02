@@ -3,8 +3,10 @@
  */
 
 import { Context, MongoDbProvider } from '@open-template-hub/common';
+import { PreconfiguredMessage } from '../interface/preconfigured-message-interface';
 import { Sms } from '../interface/sms.interface';
 import { ServiceClient } from '../interface/service-client.interface';
+import { PreconfiguredMessageRepository } from '../repository/preconfigured-message.repository';
 import { ServiceProviderRepository } from '../repository/service-provider.repository';
 import { SmsServiceWrapper } from '../wrapper/sms-service.wrapper';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,13 +20,37 @@ export class SmsController {
   sendSms = async (context: Context, sms: Sms): Promise<any> => {
     sms.id = uuidv4()
 
+    const preconfiguredMessage = await this.getPreconfiguredMessage(context.mongodb_provider, sms.messageKey);
+
     const serviceClient = await this.getServiceClient(
       context.mongodb_provider,
-      context.serviceKey
+      preconfiguredMessage.providerKey
     );
+
+    // TODO: check if preconfmessage null
+
+    // TODO: Build from 'common' library, add func to builder
+    let keyString = preconfiguredMessage.message;
+    Object.keys(sms.payload).forEach( (key, index) => {
+      keyString = keyString.replace('{{' + key + '}}', sms.payload[key]);
+    })
+
+    sms.message = keyString
+    sms.from = preconfiguredMessage.from
 
     return await serviceClient.service.send(serviceClient.client, sms);
   };
+
+  /**
+   * Creates preconfigured message
+   * @param context context
+   * @param sms preconfiguredMessage
+   */
+  createPreconfiguredMessage = async (context: Context, preconfiguredMessage: PreconfiguredMessage): Promise<any> => {
+    const conn = context.mongodb_provider.getConnection()
+    const preconfiguredMessageRepository = await new PreconfiguredMessageRepository().initialize(conn);
+    return await preconfiguredMessageRepository.createPreconfiguredMessage(preconfiguredMessage)
+  }
 
   /**
    * gets service client
@@ -69,4 +95,22 @@ export class SmsController {
 
     return serviceConfig;
   };
+
+  private getPreconfiguredMessage = async (
+      provider: MongoDbProvider,
+      messageKey: string
+  ): Promise<PreconfiguredMessage> => {
+    const conn = provider.getConnection();
+
+    const preconfiguredMessageRepository = await new PreconfiguredMessageRepository().initialize(conn);
+
+    let preconfiguredMessage: PreconfiguredMessage =
+        await preconfiguredMessageRepository.getPreconfiguredMessage(messageKey);
+
+    if (preconfiguredMessage === null) {
+      throw new Error('Preconfigured message not found');
+    }
+
+    return preconfiguredMessage;
+  }
 }
