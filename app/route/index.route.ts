@@ -12,6 +12,7 @@ import { Environment } from '../../environment';
 import { SmsQueueConsumer } from '../consumer/sms-queue.consumer';
 import {
   publicRoutes as smsPublicRoutes,
+  adminRoutes as smsAdminRoutes,
   router as smsRouter,
 } from './sms.route';
 import {
@@ -72,6 +73,9 @@ export namespace Routes {
       ...populateRoutes(subRoutes.sms, smsPublicRoutes),
     ];
     console.log('Public Routes: ', publicRoutes);
+
+    adminRoutes = [...populateRoutes(subRoutes.sms, smsAdminRoutes)];
+    console.log('Admin Routes: ', adminRoutes);
 
     const responseInterceptor = (
       req: Request,
