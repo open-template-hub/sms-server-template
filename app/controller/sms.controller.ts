@@ -2,7 +2,7 @@
  * @description holds file controller
  */
 
-import { Context, MongoDbProvider, BuilderUtil } from '@open-template-hub/common';
+import { Context, MongoDbProvider, BuilderUtil, HttpError, ResponseCode } from '@open-template-hub/common';
 import { PreconfiguredMessage } from '../interface/preconfigured-message-interface';
 import { Sms } from '../interface/sms.interface';
 import { ServiceClient } from '../interface/service-client.interface';
@@ -50,6 +50,12 @@ export class SmsController {
         sms.providerKey, 
         sms.languageCode
       );
+
+      if( preconfiguredMessage === null ) {
+        let e = new Error('preconfigured message not found') as HttpError;
+        e.responseCode = ResponseCode.BAD_REQUEST;
+        throw e;
+      }
 
       message = preconfiguredMessage.message;
       from = preconfiguredMessage.from;
@@ -155,4 +161,4 @@ export class SmsController {
     }
     return m;
   }
-}
+} 
