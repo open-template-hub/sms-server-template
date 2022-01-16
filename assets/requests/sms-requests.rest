@@ -4,6 +4,7 @@ Content-Type: application/json
 Authorization: Bearer token
 
 {
+  "providerKey": "Twilio",
   "messageKey": "2FACodeSend",
   "languageCode": "en",
   "to": "",
@@ -12,18 +13,3 @@ Authorization: Bearer token
     "twoFactorCode": "422244"
   }
 }
-
-### Create Preconfigured Message
-POST http://localhost:4007/sms/preconfigured-message
-Content-Type: application/json
-Authorization: Bearer token
-
-{
-  "key": "2FACodeSend",
-  "languageCode": "en",
-  "message": "Hello {{username}}, here your 2FA code {{twoFactorCode}}",
-  "from": ,
-  "providerKey": "Twilio"
-}
-
-
