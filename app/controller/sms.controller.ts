@@ -2,7 +2,7 @@
  * @description holds file controller
  */
 
-import { Context, MongoDbProvider, HttpError, ResponseCode, BuilderUtil } from '@open-template-hub/common';
+import { Context, MongoDbProvider, BuilderUtil } from '@open-template-hub/common';
 import { PreconfiguredMessage } from '../interface/preconfigured-message-interface';
 import { Sms } from '../interface/sms.interface';
 import { ServiceClient } from '../interface/service-client.interface';
