@@ -7,8 +7,12 @@ import { ProviderKeyEnum } from '../enum/provider-key.enum';
 
 export interface PreconfiguredMessage {
   key: string,
-  languageCode: LanguageEnum,
-  message: string,
-  from: string,
-  providerKey: ProviderKeyEnum
+  messages: {
+    language: string,
+    message: string
+  }[],
+  payload: {
+    provider: ProviderKeyEnum,
+    from: string
+  }[]
 }

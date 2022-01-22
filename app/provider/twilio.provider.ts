@@ -47,8 +47,6 @@ export class TwilioService implements SmsService {
       sms.externalId = response.sid
     }
 
-
-
     return sms
   }
 }

@@ -5,7 +5,7 @@
 import mongoose from 'mongoose';
 
 export class PreconfiguredMessageDataModel {
-  private readonly collectionName: string = 'preconfigured-message';
+  private readonly collectionName: string = 'preconfigured_message';
 
   private productSchema: mongoose.Schema;
 
@@ -15,10 +15,8 @@ export class PreconfiguredMessageDataModel {
      */
     const schema: mongoose.SchemaDefinition = {
       key: { type: String, unique: true, required: true, dropDups: true },
-      languageCode: { type: String, required: true },
-      message: { type: String, required: true },
-      from: { type: String, required: true },
-      providerKey: { type: String, required: true }
+      messages: { type: Array, required: true },
+      payload: { type: Array, required: true }
     };
 
     this.productSchema = new mongoose.Schema( schema );

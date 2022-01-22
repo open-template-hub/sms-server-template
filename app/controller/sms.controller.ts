@@ -31,7 +31,7 @@ export class SmsController {
 
     const serviceProvider = await this.getServiceProvider(
       context.mongodb_provider,
-      sms.providerKey
+      sms.providerKey.toUpperCase()
     );
 
     const serviceClient = await this.getServiceClient(
@@ -47,18 +47,12 @@ export class SmsController {
       const preconfiguredMessage = await this.getPreconfiguredMessage(
         context.mongodb_provider,
         messageKey,
-        sms.providerKey, 
+        sms.providerKey,
         sms.languageCode
       );
 
-      if( preconfiguredMessage === null ) {
-        let e = new Error('preconfigured message not found') as HttpError;
-        e.responseCode = ResponseCode.BAD_REQUEST;
-        throw e;
-      }
-
-      message = preconfiguredMessage.message;
-      from = preconfiguredMessage.from;
+      message = preconfiguredMessage.messages[0].message;
+      from = preconfiguredMessage.payload[0].from;
     }
     else {
       message = sms.payload.message
@@ -147,9 +141,12 @@ export class SmsController {
     let preconfiguredMessage: PreconfiguredMessage =
         await preconfiguredMessageRepository.getPreconfiguredMessage( messageKey, providerKey, languageCode );
 
-    if (preconfiguredMessage === null) {
-      throw new Error('Preconfigured message not found');
-    }
+      if( preconfiguredMessage?.messages?.length === 0 
+        || preconfiguredMessage?.payload?.length === 0 ) {
+        let e = new Error('preconfigured message not found') as HttpError;
+        e.responseCode = ResponseCode.BAD_REQUEST;
+        throw e;
+      }
 
     return preconfiguredMessage;
   }

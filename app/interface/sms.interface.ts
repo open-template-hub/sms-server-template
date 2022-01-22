@@ -11,7 +11,7 @@ export interface Sms {
   created_time?: string;
   status?: string;
   providerKey: string;
-  messageKey?: string; // TODO: nullable - Done
+  messageKey?: string;
   languageCode: LanguageEnum;
   to: string;
   payload: any;

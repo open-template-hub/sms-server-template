@@ -37,7 +37,13 @@ export class PreconfiguredMessageRepository {
   getPreconfiguredMessage = async ( key: string, providerKey: string, languageCode: string ) => {
     try {
       // TODO: key && languageCode && providerKey - Done
-      return await this.dataModel.findOne( { key, providerKey, languageCode } );
+      return await this.dataModel.findOne( 
+        { key },
+        { 
+          messages: { $elemMatch: { language: "en" } }, 
+          payload: { $elemMatch: { provider: providerKey } } 
+        }
+      );
     } catch ( error ) {
       console.error( '> getPreconfiguredMessage error: ', error );
       throw error;
