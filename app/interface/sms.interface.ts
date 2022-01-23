@@ -1,7 +1,6 @@
 /**
  * @description holds sms interface
  */
-import { LanguageEnum } from '../enum/language.enum';
 
 export interface Sms {
   id?: string;
@@ -11,8 +10,8 @@ export interface Sms {
   created_time?: string;
   status?: string;
   providerKey: string;
-  messageKey?: string; // TODO: nullable - Done
-  languageCode: LanguageEnum;
+  messageKey?: string;
+  languageCode: string;
   to: string;
   payload: any;
 }

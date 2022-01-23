@@ -3,5 +3,5 @@
  */
 
 export enum SmsServiceEnum {
-  Twilio = 'Twilio',
+  Twilio = 'TWILIO',
 }

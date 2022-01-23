@@ -35,11 +35,11 @@ export class SmsServiceWrapper implements SmsService {
    * @param client client
    * @param file file
    */
-  send = async (client: any, sms: Sms): Promise<Sms> => {
+  send = async (client: any, sms: Sms, payload: any): Promise<Sms> => {
     if (this.smsService === undefined) {
       return sms;
     }
 
-    return this.smsService.send(client, sms);
+    return this.smsService.send(client, sms, payload);
   };
 }

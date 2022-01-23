@@ -25,13 +25,13 @@ export class SmsController {
    * @param sms sms
    */
   sendSms = async (context: Context, sms: Sms): Promise<any> => {
-    sms.id = uuidv4()
+    sms.id = uuidv4();
 
-    const messageKey = sms.messageKey
+    const messageKey = sms.messageKey;
 
     const serviceProvider = await this.getServiceProvider(
       context.mongodb_provider,
-      sms.providerKey
+      sms.providerKey.toUpperCase()
     );
 
     const serviceClient = await this.getServiceClient(
@@ -41,42 +41,30 @@ export class SmsController {
     );
 
     let message: string;
-    let from: string;
+    let preconfiguredMessagePayload: any;
 
     if( messageKey ) {
       const preconfiguredMessage = await this.getPreconfiguredMessage(
         context.mongodb_provider,
         messageKey,
-        sms.providerKey, 
+        sms.providerKey,
         sms.languageCode
       );
 
-      if( preconfiguredMessage === null ) {
-        let e = new Error('preconfigured message not found') as HttpError;
-        e.responseCode = ResponseCode.BAD_REQUEST;
-        throw e;
-      }
-
-      message = preconfiguredMessage.message;
-      from = preconfiguredMessage.from;
+      message = preconfiguredMessage.messages[0].message;
+      preconfiguredMessagePayload = preconfiguredMessage.payload;
     }
     else {
-      message = sms.payload.message
-      from = serviceProvider.payload.from
+      message = sms.payload.message;
+      sms.from = serviceProvider.payload.from;
     }
 
-    // TODO: check if preconfmessage null - Done
-
-    // TODO: Build from 'common' library, add func to builder - Done
-
     const messageParams = this.objectToMap( sms.payload );
-
     let messageBody = this.builderUtil.buildTemplateFromString( message, messageParams );
 
-    sms.message = messageBody
-    sms.from = from
+    sms.message = messageBody;
 
-    return await serviceClient.service.send(serviceClient.client, sms);
+    return serviceClient.service.send(serviceClient.client, sms, preconfiguredMessagePayload);
   };
 
   /**
@@ -145,10 +133,12 @@ export class SmsController {
     const preconfiguredMessageRepository = await new PreconfiguredMessageRepository().initialize(conn);
 
     let preconfiguredMessage: PreconfiguredMessage =
-        await preconfiguredMessageRepository.getPreconfiguredMessage( messageKey, providerKey, languageCode );
+        await preconfiguredMessageRepository.getPreconfiguredMessage( messageKey, languageCode );
 
-    if (preconfiguredMessage === null) {
-      throw new Error('Preconfigured message not found');
+    if( preconfiguredMessage?.messages?.length === 0 ) {
+      let e = new Error('preconfigured message not found') as HttpError;
+      e.responseCode = ResponseCode.BAD_REQUEST;
+      throw e;
     }
 
     return preconfiguredMessage;
