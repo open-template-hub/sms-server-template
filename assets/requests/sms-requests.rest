@@ -1,15 +1,15 @@
 ### Send Sms
 POST http://localhost:4007/sms/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1lcnQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2NDI5Mzk4MTQsImV4cCI6MTY0Mjk0MzQxNH0.9Cyyx1YUT-zRrCHTREU47wfx9Jlw-vP1lncbWhd3jH8
+Authorization: Bearer token
 
 {
   "providerKey": "Twilio",
+  "messageKey": "2FACodeSend",
   "languageCode": "en",
-  "to": "+905425957818",
+  "to": "",
   "payload": {
     "username": "mert",
-    "twoFactorCode": "422244",
-    
+    "twoFactorCode": "422244"
   }
 }
