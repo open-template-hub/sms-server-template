@@ -33,7 +33,11 @@ export class TwilioService implements SmsService {
    * @param client service client
    * @param sms sms
    */
-  async send(client: any, sms: Sms): Promise<Sms> {
+  async send( client: any, sms: Sms, payload: any ): Promise<Sms> {
+    if( payload?.twilio?.from ) {
+      sms.from = payload.twilio.from
+    }
+
     const response = await client.messages.create( {
       body: sms.message,
       from: sms.from,

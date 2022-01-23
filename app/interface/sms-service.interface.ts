@@ -16,5 +16,5 @@ export interface SmsService {
    * @param client service client
    * @param sms sms
    */
-  send( client: any, sms: Sms ): Promise<Sms>;
+  send( client: any, sms: Sms, payload: any ): Promise<Sms>;
 }

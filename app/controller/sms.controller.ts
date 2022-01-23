@@ -41,7 +41,7 @@ export class SmsController {
     );
 
     let message: string;
-    let from: string;
+    let preconfiguredMessagePayload: any;
 
     if( messageKey ) {
       const preconfiguredMessage = await this.getPreconfiguredMessage(
@@ -52,25 +52,19 @@ export class SmsController {
       );
 
       message = preconfiguredMessage.messages[0].message;
-      from = preconfiguredMessage.payload[0].from;
+      preconfiguredMessagePayload = preconfiguredMessage.payload
     }
     else {
       message = sms.payload.message
-      from = serviceProvider.payload.from
+      sms.from = serviceProvider.payload.from
     }
 
-    // TODO: check if preconfmessage null - Done
-
-    // TODO: Build from 'common' library, add func to builder - Done
-
     const messageParams = this.objectToMap( sms.payload );
-
     let messageBody = this.builderUtil.buildTemplateFromString( message, messageParams );
 
     sms.message = messageBody
-    sms.from = from
 
-    return await serviceClient.service.send(serviceClient.client, sms);
+    return await serviceClient.service.send(serviceClient.client, sms, preconfiguredMessagePayload);
   };
 
   /**
@@ -139,10 +133,9 @@ export class SmsController {
     const preconfiguredMessageRepository = await new PreconfiguredMessageRepository().initialize(conn);
 
     let preconfiguredMessage: PreconfiguredMessage =
-        await preconfiguredMessageRepository.getPreconfiguredMessage( messageKey, providerKey, languageCode );
+        await preconfiguredMessageRepository.getPreconfiguredMessage( messageKey, languageCode );
 
-      if( preconfiguredMessage?.messages?.length === 0 
-        || preconfiguredMessage?.payload?.length === 0 ) {
+      if( preconfiguredMessage?.messages?.length === 0 ) {
         let e = new Error('preconfigured message not found') as HttpError;
         e.responseCode = ResponseCode.BAD_REQUEST;
         throw e;

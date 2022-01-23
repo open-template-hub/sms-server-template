@@ -1,3 +1,4 @@
+import { StringLiteral } from 'typescript';
 import { PreconfiguredMessageDataModel } from '../data/preconfigured-message.data';
 import { PreconfiguredMessage } from '../interface/preconfigured-message-interface';
 
@@ -34,15 +35,11 @@ export class PreconfiguredMessageRepository {
    * @param key key
    * @returns service provider
    */
-  getPreconfiguredMessage = async ( key: string, providerKey: string, languageCode: string ) => {
+  getPreconfiguredMessage = async ( key: string, languageCode: string ) => {
     try {
-      // TODO: key && languageCode && providerKey - Done
       return await this.dataModel.findOne( 
         { key },
-        { 
-          messages: { $elemMatch: { language: "en" } }, 
-          payload: { $elemMatch: { provider: providerKey } } 
-        }
+        { messages: { $elemMatch: { language: "en" } }, payload: 1 }
       );
     } catch ( error ) {
       console.error( '> getPreconfiguredMessage error: ', error );

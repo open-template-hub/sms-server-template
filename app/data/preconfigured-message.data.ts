@@ -16,7 +16,7 @@ export class PreconfiguredMessageDataModel {
     const schema: mongoose.SchemaDefinition = {
       key: { type: String, unique: true, required: true, dropDups: true },
       messages: { type: Array, required: true },
-      payload: { type: Array, required: true }
+      payload: { type: Object, required: true }
     };
 
     this.productSchema = new mongoose.Schema( schema );
