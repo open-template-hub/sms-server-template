@@ -135,11 +135,11 @@ export class SmsController {
     let preconfiguredMessage: PreconfiguredMessage =
         await preconfiguredMessageRepository.getPreconfiguredMessage( messageKey, languageCode );
 
-      if( preconfiguredMessage?.messages?.length === 0 ) {
-        let e = new Error('preconfigured message not found') as HttpError;
-        e.responseCode = ResponseCode.BAD_REQUEST;
-        throw e;
-      }
+    if( preconfiguredMessage?.messages?.length === 0 ) {
+      let e = new Error('preconfigured message not found') as HttpError;
+      e.responseCode = ResponseCode.BAD_REQUEST;
+      throw e;
+    }
 
     return preconfiguredMessage;
   }
