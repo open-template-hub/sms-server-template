@@ -1,4 +1,3 @@
-import { StringLiteral } from 'typescript';
 import { PreconfiguredMessageDataModel } from '../data/preconfigured-message.data';
 import { PreconfiguredMessage } from '../interface/preconfigured-message-interface';
 
@@ -39,7 +38,7 @@ export class PreconfiguredMessageRepository {
     try {
       return await this.dataModel.findOne( 
         { key },
-        { messages: { $elemMatch: { language: "en" } }, payload: 1 }
+        { messages: { $elemMatch: { language: languageCode } }, payload: 1 }
       );
     } catch ( error ) {
       console.error( '> getPreconfiguredMessage error: ', error );

@@ -25,9 +25,9 @@ export class SmsController {
    * @param sms sms
    */
   sendSms = async (context: Context, sms: Sms): Promise<any> => {
-    sms.id = uuidv4()
+    sms.id = uuidv4();
 
-    const messageKey = sms.messageKey
+    const messageKey = sms.messageKey;
 
     const serviceProvider = await this.getServiceProvider(
       context.mongodb_provider,
@@ -52,19 +52,19 @@ export class SmsController {
       );
 
       message = preconfiguredMessage.messages[0].message;
-      preconfiguredMessagePayload = preconfiguredMessage.payload
+      preconfiguredMessagePayload = preconfiguredMessage.payload;
     }
     else {
-      message = sms.payload.message
-      sms.from = serviceProvider.payload.from
+      message = sms.payload.message;
+      sms.from = serviceProvider.payload.from;
     }
 
     const messageParams = this.objectToMap( sms.payload );
     let messageBody = this.builderUtil.buildTemplateFromString( message, messageParams );
 
-    sms.message = messageBody
+    sms.message = messageBody;
 
-    return await serviceClient.service.send(serviceClient.client, sms, preconfiguredMessagePayload);
+    return serviceClient.service.send(serviceClient.client, sms, preconfiguredMessagePayload);
   };
 
   /**
