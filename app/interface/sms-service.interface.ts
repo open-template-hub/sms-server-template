@@ -17,4 +17,10 @@ export interface SmsService {
    * @param sms sms
    */
   send( client: any, sms: Sms, payload: any ): Promise<Sms>;
+
+  /**
+   * get from value from payload
+   * @param payload 
+   */
+  getFromValue( payload: any ): string | undefined;
 }

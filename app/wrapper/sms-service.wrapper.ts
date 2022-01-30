@@ -42,4 +42,12 @@ export class SmsServiceWrapper implements SmsService {
 
     return this.smsService.send(client, sms, payload);
   };
+
+  getFromValue( payload: any ): string | undefined {
+    if ( this.smsService === undefined ) {
+      return undefined;
+    }
+
+    return this.smsService.getFromValue(payload);
+  } 
 }

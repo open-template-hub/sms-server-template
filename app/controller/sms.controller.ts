@@ -41,6 +41,7 @@ export class SmsController {
     );
 
     let message: string;
+    let from: string | undefined;
     let preconfiguredMessagePayload: any;
 
     if( messageKey ) {
@@ -48,21 +49,29 @@ export class SmsController {
         context.mongodb_provider,
         messageKey,
         sms.providerKey,
-        sms.languageCode
+        sms.languageCode ?? process.env.LANGUAGE_CODE ?? 'en'
       );
 
       message = preconfiguredMessage.messages[0].message;
       preconfiguredMessagePayload = preconfiguredMessage.payload;
+      from = serviceClient.service.getFromValue( preconfiguredMessagePayload ); 
     }
     else {
       message = sms.payload.message;
-      sms.from = serviceProvider.payload.from;
+      from = serviceProvider.payload.from;
+    }
+
+    if( from === undefined ) { 
+      let e = new Error( 'From not found' ) as HttpError;
+      e.responseCode = ResponseCode.INTERNAL_SERVER_ERROR;
+      throw e;
     }
 
     const messageParams = this.objectToMap( sms.payload );
     let messageBody = this.builderUtil.buildTemplateFromString( message, messageParams );
 
     sms.message = messageBody;
+    sms.from = from;
 
     return serviceClient.service.send(serviceClient.client, sms, preconfiguredMessagePayload);
   };

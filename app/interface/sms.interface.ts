@@ -11,7 +11,7 @@ export interface Sms {
   status?: string;
   providerKey: string;
   messageKey?: string;
-  languageCode: string;
+  languageCode?: string;
   to: string;
   payload: any;
 }

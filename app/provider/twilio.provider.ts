@@ -34,10 +34,6 @@ export class TwilioService implements SmsService {
    * @param sms sms
    */
   async send( client: any, sms: Sms, payload: any ): Promise<Sms> {
-    if( payload?.twilio?.from ) {
-      sms.from = payload.twilio.from
-    }
-
     const response = await client.messages.create( {
       body: sms.message,
       from: sms.from,
@@ -47,10 +43,18 @@ export class TwilioService implements SmsService {
     if( response ) {
       sms.created_time = response.dateCreated
       sms.status = response.status
-      // TODO: if twilio response has id, create external_id
       sms.externalId = response.sid
     }
 
     return sms
+  }
+
+  /**
+   * get from value 
+   * @param payload any payload
+   * @returns string from
+   */
+   getFromValue(payload: any): string | undefined {
+      return payload?.twilio?.from
   }
 }
