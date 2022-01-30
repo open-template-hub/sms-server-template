@@ -49,7 +49,7 @@ export class SmsController {
         context.mongodb_provider,
         messageKey,
         sms.providerKey,
-        sms.languageCode ??= process.env.LANGUAGE_CODE ??= 'en'
+        sms.languageCode ?? process.env.LANGUAGE_CODE ?? 'en'
       );
 
       message = preconfiguredMessage.messages[0].message;
