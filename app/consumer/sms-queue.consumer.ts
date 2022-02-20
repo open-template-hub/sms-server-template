@@ -10,7 +10,6 @@ export class SmsQueueConsumer {
   ) {}
 
   onMessage = async (msg: any) => {
-    console.log(' Test ');
     if (msg !== null) {
       const msgStr = msg.content.toString();
       const msgObj = JSON.parse(msgStr);
@@ -40,7 +39,7 @@ export class SmsQueueConsumer {
             this.mongodbProvider,
             {
               messageKey,
-              providerKey: "Twilio", // TODO: Ask
+              providerKey: "Twilio",
               to: phoneNumber,
               payload: params,
               languageCode: message.language

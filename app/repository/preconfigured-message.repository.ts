@@ -1,4 +1,3 @@
-import { Message } from 'twilio/lib/twiml/MessagingResponse';
 import { PreconfiguredMessageDataModel } from '../data/preconfigured-message.data';
 import { PreconfiguredMessage } from '../interface/preconfigured-message-interface';
 
@@ -37,11 +36,6 @@ export class PreconfiguredMessageRepository {
    */
   getPreconfiguredMessage = async ( key: string, languageCode: string | undefined, defaultLangaugeCode: string ) => {
     try {
-      /*return await this.dataModel.findOne( 
-        { key },
-        { messages: { $elemMatch: { language: languageCode } }, payload: 1 }
-      );*/
-
       let dataModel = await this.dataModel.aggregate([
         { $match: { key } },
         { $project: {
