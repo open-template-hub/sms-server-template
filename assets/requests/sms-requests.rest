@@ -4,12 +4,12 @@ Content-Type: application/json
 Authorization: Bearer token
 
 {
+  "messageKey": "twoFactorCodeRequest",
   "providerKey": "Twilio",
-  "messageKey": "2FACodeSend",
-  "languageCode": "en",
-  "to": "",
+  "languageCode": "tr",
+  "to": "+11111",
   "payload": {
     "username": "mert",
-    "twoFactorCode": "422244"
+    "twoFactorCode": "422244",
   }
 }

@@ -97,7 +97,7 @@ DEFAULT_LANGUAGE={Language Code}
 
 ### Service Provider Configurations
 
-#### Twillio Config:
+#### 1. Twillio
 
 ```json
    {
