@@ -55,7 +55,7 @@ export namespace Routes {
     const channelTag = new Environment().args().mqArgs
       ?.smsServerMessageQueueChannel as string;
     message_queue_provider.getChannel(channelTag).then((channel: any) => {
-      const smsQueueConsumer = new SmsQueueConsumer(channel);
+      const smsQueueConsumer = new SmsQueueConsumer(channel, mongodb_provider);
       message_queue_provider.consume(
         channel,
         channelTag,

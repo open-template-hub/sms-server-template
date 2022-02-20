@@ -26,8 +26,10 @@ const smsController = new SmsController();
 
 router.post(subRoutes.me, async (req: Request, res: Response) => {
   // Send Sms
+  const context = res.locals.ctx
+
   let sms = await smsController.sendSms(
-    res.locals.ctx,
+    context.mongodb_provider,
     req.body as Sms
   );
   res.status(ResponseCode.CREATED).json({ sms });

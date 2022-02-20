@@ -19,6 +19,7 @@ export class Environment {
       fileServerMessageQueueChannel: process.env.FILE_SERVER_QUEUE_CHANNEL,
       orchestrationServerMessageQueueChannel:
         process.env.ORCHESTRATION_SERVER_QUEUE_CHANNEL,
+      smsServerMessageQueueChannel: process.env.SMS_SERVER_QUEUE_CHANNEL
     } as MqArgs;
 
     this._args = {

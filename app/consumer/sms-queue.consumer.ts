@@ -1,9 +1,16 @@
-import { SmsActionType } from '@open-template-hub/common';
+import { MongoDbProvider, SmsActionType } from '@open-template-hub/common';
+import { SmsController } from '../controller/sms.controller';
+import { Sms } from '../interface/sms.interface';
 
 export class SmsQueueConsumer {
-  constructor(private channel: any) {}
+  constructor(
+    private channel: any,
+    private mongodbProvider: MongoDbProvider,
+    private smsController = new SmsController()
+  ) {}
 
   onMessage = async (msg: any) => {
+    console.log(' Test ');
     if (msg !== null) {
       const msgStr = msg.content.toString();
       const msgObj = JSON.parse(msgStr);
@@ -13,15 +20,35 @@ export class SmsQueueConsumer {
       // Decide requeue in the error handling
       let requeue = false;
 
-      if (message.example) {
-        var exampleHook = async () => {
-          console.log('SMS server example');
-        };
+      let messageKey: string | undefined;
+      let phoneNumber: string | undefined;
+      let params: any | undefined
 
-        await this.operate(msg, msgObj, requeue, exampleHook);
+      if( message?.smsType && Object.keys( message.smsType )?.length > 0 ) {
+        messageKey = Object.keys( message.smsType )[0];
+        phoneNumber = ( message.smsType as any )[messageKey].params.phoneNumber;
+        params = ( message.smsType as any )[messageKey].params 
       } else {
         console.log('Message will be rejected: ', msgObj);
         this.channel.reject(msg, false);
+        return
+      }
+
+      if( messageKey && phoneNumber && params ) {
+        let hook = async() => {
+          await this.smsController.sendSms(
+            this.mongodbProvider,
+            {
+              messageKey,
+              providerKey: "Twilio", // TODO: Ask
+              to: phoneNumber,
+              payload: params,
+              languageCode: message.language
+            } as Sms
+          );
+        };
+
+        await this.operate( msg, msgObj, requeue, hook );
       }
     }
   };

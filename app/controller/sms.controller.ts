@@ -24,18 +24,22 @@ export class SmsController {
    * @param context context
    * @param sms sms
    */
-  sendSms = async (context: Context, sms: Sms): Promise<any> => {
+  sendSms = async (
+    mongodb_provider: MongoDbProvider, 
+    sms: Sms
+    ): Promise<any> => {
+  
     sms.id = uuidv4();
 
     const messageKey = sms.messageKey;
 
     const serviceProvider = await this.getServiceProvider(
-      context.mongodb_provider,
+      mongodb_provider,
       sms.providerKey.toUpperCase()
     );
 
     const serviceClient = await this.getServiceClient(
-      context.mongodb_provider,
+      mongodb_provider,
       serviceProvider.key,
       serviceProvider.payload
     );
@@ -45,11 +49,13 @@ export class SmsController {
     let preconfiguredMessagePayload: any;
 
     if( messageKey ) {
+      const defaultLanguageCode = process.env.LANGUAGE_CODE ?? 'en';
+
       const preconfiguredMessage = await this.getPreconfiguredMessage(
-        context.mongodb_provider,
+        mongodb_provider,
         messageKey,
-        sms.providerKey,
-        sms.languageCode ?? process.env.LANGUAGE_CODE ?? 'en'
+        sms.languageCode,
+        defaultLanguageCode
       );
 
       message = preconfiguredMessage.messages[0].message;
@@ -134,23 +140,23 @@ export class SmsController {
   private getPreconfiguredMessage = async (
       provider: MongoDbProvider,
       messageKey: string,
-      providerKey: string,
-      languageCode: string
+      languageCode: string | undefined,
+      defaultLangaugeCode: string
   ): Promise<PreconfiguredMessage> => {
     const conn = provider.getConnection();
 
     const preconfiguredMessageRepository = await new PreconfiguredMessageRepository().initialize(conn);
 
-    let preconfiguredMessage: PreconfiguredMessage =
-        await preconfiguredMessageRepository.getPreconfiguredMessage( messageKey, languageCode );
+    let preconfiguredMessage: PreconfiguredMessage[] =
+        await preconfiguredMessageRepository.getPreconfiguredMessage( messageKey, languageCode, defaultLangaugeCode );
 
-    if( preconfiguredMessage?.messages?.length === 0 ) {
+    if( preconfiguredMessage.length === 0 || preconfiguredMessage[0].messages?.length < 1 ) {
       let e = new Error('preconfigured message not found') as HttpError;
       e.responseCode = ResponseCode.BAD_REQUEST;
       throw e;
     }
 
-    return preconfiguredMessage;
+    return preconfiguredMessage[0];
   }
 
   private objectToMap = (obj: object) => {
