@@ -5,7 +5,7 @@
 </p>
 
 <h1 align="center">
-Open Template Hub - SMS Server Template v1
+Open Template Hub - SMS Server Template v3
 </h1>
 
 [![License](https://img.shields.io/github/license/open-template-hub/sms-server-template?color=43b043&style=for-the-badge)](LICENSE)
@@ -18,8 +18,6 @@ Open Template Hub - SMS Server Template v1
 SMS Server Template is a generic open-source sms server that has a simple yet powerful design to connect your business with third-party sms service providers (like Twilio, Amazon SNS).
 
 ## Ways to Begin
-
-npm install --save-dev @types/node
 
 ### 1. Express Deploy
 
@@ -74,6 +72,44 @@ ORCHESTRATION_SERVER_QUEUE_CHANNEL=oth_orchestration_queue
 
 ACCESS_TOKEN_SECRET={Access Token Secret}
 RESPONSE_ENCRYPTION_SECRET={Response Encryption Secret}
+
+DEFAULT_LANGUAGE={Language Code}
+```
+
+### Example Preconfigured Message:
+
+```json
+{
+   "key": "2FACodeSend", 
+   "messages": [
+   {
+      "language": "en", 
+      "message": "Hello ${username}, here is your 2FA code ${twoFactorCode}"
+   }
+   ],
+   "payload": {
+      "twilio": {
+         "from": "{Your Twillio Phone Number}"
+         }
+      }
+   }
+```
+
+### Service Provider Configurations
+
+#### 1. Twillio
+
+```json
+   {
+      "key": "TWILIO",
+      "description": "Twilio SMS Provider",
+      "payload": {
+         "accountId": "{Your Twillio Account Id}",
+         "authToken": "{Your Twillio Account Token}",
+         "serviceId": "{Your Twillio Service Id}",
+         "from": "{Your Twillio Phone Number}"
+      }
+   }
 ```
 
 ## Http Requests
@@ -89,6 +125,7 @@ You can find list of available http request in the [requests](assets/requests) d
   <tr>
     <td align="center"><a href="https://github.com/furknyavuz"><img src="https://avatars0.githubusercontent.com/u/2248168?s=460&u=435ef6ade0785a7a135ce56cae751fb3ade1d126&v=4" width="100px;" alt=""/><br /><sub><b>Furkan Yavuz</b></sub></a><br /><a href="https://github.com/open-template-hub/sms-server-template/issues/created_by/furknyavuz" title="Answering Questions">💬</a> <a href="https://github.com/open-template-hub/sms-server-template/commits?author=furknyavuz" title="Documentation">📖</a> <a href="https://github.com/open-template-hub/sms-server-template/pulls?q=is%3Apr+reviewed-by%3Afurknyavuz" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/fatihturker"><img src="https://avatars1.githubusercontent.com/u/2202179?s=460&u=261b1129e7106c067783cb022ab9999aad833bdc&v=4" width="100px;" alt=""/><br /><sub><b>Fatih Turker</b></sub></a><br /><a href="https://github.com/open-template-hub/sms-server-template/issues/created_by/fatihturker" title="Answering Questions">💬</a> <a href="https://github.com/open-template-hub/sms-server-template/commits?author=fatihturker" title="Documentation">📖</a> <a href="https://github.com/open-template-hub/sms-server-template/pulls?q=is%3Apr+reviewed-by%3Afatihturker" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/mertlsarac"><img src="https://avatars1.githubusercontent.com/u/38442589?s=400&u=aa3cda11724fc297a0bfa6beb35c9be81687cf3c&v=4" width="100px;" alt=""/><br /><sub><b>Mert Sarac</b></sub></a><br /><a href="https://github.com/open-template-hub/sms-server-template/issues/created_by/mertlsarac" title="Answering Questions">💬</a> <a href="https://github.com/open-template-hub/sms-server-template/commits?author=mertlsarac" title="Documentation">📖</a> <a href="https://github.com/open-template-hub/sms-server-template/pulls?q=is%3Apr+reviewed-by%3Amertlsarac" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 <!-- markdownlint-enable -->

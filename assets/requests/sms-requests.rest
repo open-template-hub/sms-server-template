@@ -1,0 +1,15 @@
+### Send Sms
+POST http://localhost:4007/sms/me
+Content-Type: application/json
+Authorization: Bearer token
+
+{
+  "messageKey": "twoFactorCodeRequest",
+  "providerKey": "Twilio",
+  "languageCode": "tr",
+  "to": "+11111",
+  "payload": {
+    "username": "mert",
+    "twoFactorCode": "422244",
+  }
+}

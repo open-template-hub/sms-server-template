@@ -3,7 +3,15 @@
  */
 
 export interface Sms {
-  id: number;
-  message: string;
-  created_time: Date;
+  id?: string;
+  externalId?: string;
+  message?: string;
+  from?: string;
+  created_time?: string;
+  status?: string;
+  providerKey: string;
+  messageKey?: string;
+  languageCode?: string;
+  to: string;
+  payload: any;
 }
