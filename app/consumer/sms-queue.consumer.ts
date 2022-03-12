@@ -1,13 +1,23 @@
-import { MongoDbProvider, SmsActionType } from '@open-template-hub/common';
+import {
+  ContextArgs,
+  MongoDbProvider,
+  QueueConsumer,
+  SmsActionType,
+} from '@open-template-hub/common';
 import { SmsController } from '../controller/sms.controller';
 import { Sms } from '../interface/sms.interface';
 
-export class SmsQueueConsumer {
-  constructor(
-    private channel: any,
-    private mongodbProvider: MongoDbProvider,
-    private smsController = new SmsController()
-  ) {}
+export class SmsQueueConsumer implements QueueConsumer {
+  private channel: any;
+  private ctxArgs: ContextArgs = {} as ContextArgs;
+
+  constructor(private smsController = new SmsController()) {}
+
+  init = (channel: string, ctxArgs: ContextArgs) => {
+    this.channel = channel;
+    this.ctxArgs = ctxArgs;
+    return this;
+  };
 
   onMessage = async (msg: any) => {
     if (msg !== null) {
@@ -21,33 +31,33 @@ export class SmsQueueConsumer {
 
       let messageKey: string | undefined;
       let phoneNumber: string | undefined;
-      let params: any | undefined
+      let params: any | undefined;
 
-      if( message?.smsType && Object.keys( message.smsType )?.length > 0 ) {
-        messageKey = Object.keys( message.smsType )[0];
-        phoneNumber = ( message.smsType as any )[messageKey].params.phoneNumber;
-        params = ( message.smsType as any )[messageKey].params 
+      if (message?.smsType && Object.keys(message.smsType)?.length > 0) {
+        messageKey = Object.keys(message.smsType)[0];
+        phoneNumber = (message.smsType as any)[messageKey].params.phoneNumber;
+        params = (message.smsType as any)[messageKey].params;
       } else {
         console.log('Message will be rejected: ', msgObj);
         this.channel.reject(msg, false);
-        return
+        return;
       }
 
-      if( messageKey && phoneNumber && params ) {
-        let hook = async() => {
+      if (messageKey && phoneNumber && params) {
+        let hook = async () => {
           await this.smsController.sendSms(
-            this.mongodbProvider,
+            this.ctxArgs.mongodb_provider as MongoDbProvider,
             {
               messageKey,
-              providerKey: "Twilio",
+              providerKey: 'Twilio',
               to: phoneNumber,
               payload: params,
-              languageCode: message.language
+              languageCode: message.language,
             } as Sms
           );
         };
 
-        await this.operate( msg, msgObj, requeue, hook );
+        await this.operate(msg, msgObj, requeue, hook);
       }
     }
   };
