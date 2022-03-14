@@ -1,7 +1,7 @@
 {
   "name": "sms-server-template",
   "description": "SMS Server Template is a generic open-source sms server that has a simple yet powerful design to connect your business with third-party sms service providers (like Twilio, Amazon SNS).",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "license": "MIT",
   "main": "sms-server.main.ts",
   "scripts": {
