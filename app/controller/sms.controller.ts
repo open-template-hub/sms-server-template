@@ -13,10 +13,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { SmsServiceEnum } from '../enum/sms-service.enum';
 
 export class SmsController {
-  constructor(
-    private builderUtil: BuilderUtil = new BuilderUtil()
-  ) {
-    // intentionally blank
+
+  builderUtil: BuilderUtil;
+
+  constructor() {
+    this.builderUtil = new BuilderUtil();
   }
 
   /**
@@ -25,49 +26,47 @@ export class SmsController {
    * @param sms sms
    */
   sendSms = async (
-    mongodb_provider: MongoDbProvider, 
-    sms: Sms
-    ): Promise<any> => {
-  
+      mongodb_provider: MongoDbProvider,
+      sms: Sms
+  ): Promise<any> => {
+
     sms.id = uuidv4();
 
     const messageKey = sms.messageKey;
 
     const serviceProvider = await this.getServiceProvider(
-      mongodb_provider,
-      sms.providerKey.toUpperCase()
+        mongodb_provider,
+        sms.providerKey.toUpperCase()
     );
 
     const serviceClient = await this.getServiceClient(
-      mongodb_provider,
-      serviceProvider.key,
-      serviceProvider.payload
+        serviceProvider.key,
+        serviceProvider.payload
     );
 
     let message: string;
     let from: string | undefined;
     let preconfiguredMessagePayload: any;
 
-    if( messageKey ) {
+    if ( messageKey ) {
       const defaultLanguageCode = process.env.LANGUAGE_CODE ?? 'en';
 
       const preconfiguredMessage = await this.getPreconfiguredMessage(
-        mongodb_provider,
-        messageKey,
-        sms.languageCode,
-        defaultLanguageCode
+          mongodb_provider,
+          messageKey,
+          sms.languageCode,
+          defaultLanguageCode
       );
 
-      message = preconfiguredMessage.messages[0].message;
+      message = preconfiguredMessage.messages[ 0 ].message;
       preconfiguredMessagePayload = preconfiguredMessage.payload;
-      from = serviceClient.service.getFromValue( preconfiguredMessagePayload ); 
-    }
-    else {
+      from = serviceClient.service.getFromValue( preconfiguredMessagePayload );
+    } else {
       message = sms.payload.message;
       from = serviceProvider.payload.from;
     }
 
-    if( from === undefined ) { 
+    if ( from === undefined ) {
       let e = new Error( 'From not found' ) as HttpError;
       e.responseCode = ResponseCode.INTERNAL_SERVER_ERROR;
       throw e;
@@ -79,7 +78,7 @@ export class SmsController {
     sms.message = messageBody;
     sms.from = from;
 
-    return serviceClient.service.send(serviceClient.client, sms, preconfiguredMessagePayload);
+    return serviceClient.service.send( serviceClient.client, sms, preconfiguredMessagePayload );
   };
 
   /**
@@ -87,29 +86,27 @@ export class SmsController {
    * @param context context
    * @param sms preconfiguredMessage
    */
-  createPreconfiguredMessage = async (context: Context, preconfiguredMessage: PreconfiguredMessage): Promise<any> => {
-    const conn = context.mongodb_provider.getConnection()
-    const preconfiguredMessageRepository = await new PreconfiguredMessageRepository().initialize(conn);
-    return await preconfiguredMessageRepository.createPreconfiguredMessage(preconfiguredMessage)
-  }
+  createPreconfiguredMessage = async ( context: Context, preconfiguredMessage: PreconfiguredMessage ): Promise<any> => {
+    const conn = context.mongodb_provider.getConnection();
+    const preconfiguredMessageRepository = await new PreconfiguredMessageRepository().initialize( conn );
+    return preconfiguredMessageRepository.createPreconfiguredMessage( preconfiguredMessage );
+  };
 
   /**
    * gets service client
-   * @param provider service provider
    * @param serviceKey SmsServiceEnum
    * @param serviceConfigPayload any
    */
-   private getServiceClient = async (
-    provider: MongoDbProvider,
-    serviceKey: SmsServiceEnum,
-    serviceConfigPayload: any
+  private getServiceClient = async (
+      serviceKey: SmsServiceEnum,
+      serviceConfigPayload: any
   ): Promise<ServiceClient> => {
-    const service = new SmsServiceWrapper(serviceKey);
+    const service = new SmsServiceWrapper( serviceKey );
 
-    const client = await service.initializeClient(serviceConfigPayload);
+    const client = await service.initializeClient( serviceConfigPayload );
 
-    if (client === undefined)
-      throw new Error('Client is not initialized correctly');
+    if ( client === undefined )
+      throw new Error( 'Client is not initialized correctly' );
 
     return { client, service } as ServiceClient;
   };
@@ -120,19 +117,19 @@ export class SmsController {
    * @param serviceKey service key
    */
   private getServiceProvider = async (
-    provider: MongoDbProvider,
-    serviceKey: string
+      provider: MongoDbProvider,
+      serviceKey: string
   ): Promise<any> => {
     const conn = provider.getConnection();
 
     const serviceProviderRepository =
-      await new ServiceProviderRepository().initialize(conn);
+        await new ServiceProviderRepository().initialize( conn );
 
     let serviceProvider: any =
-      await serviceProviderRepository.getServiceProviderByKey(serviceKey);
+        await serviceProviderRepository.getServiceProviderByKey( serviceKey );
 
-    if (serviceProvider === null)
-      throw new Error('Upload service can not be found');
+    if ( serviceProvider === null )
+      throw new Error( 'Upload service can not be found' );
 
     return serviceProvider;
   };
@@ -145,25 +142,25 @@ export class SmsController {
   ): Promise<PreconfiguredMessage> => {
     const conn = provider.getConnection();
 
-    const preconfiguredMessageRepository = await new PreconfiguredMessageRepository().initialize(conn);
+    const preconfiguredMessageRepository = await new PreconfiguredMessageRepository().initialize( conn );
 
     let preconfiguredMessage: PreconfiguredMessage[] =
         await preconfiguredMessageRepository.getPreconfiguredMessage( messageKey, languageCode, defaultLangaugeCode );
 
-    if( preconfiguredMessage.length === 0 || preconfiguredMessage[0].messages?.length < 1 ) {
-      let e = new Error('preconfigured message not found') as HttpError;
+    if ( preconfiguredMessage.length === 0 || preconfiguredMessage[ 0 ].messages?.length < 1 ) {
+      let e = new Error( 'preconfigured message not found' ) as HttpError;
       e.responseCode = ResponseCode.BAD_REQUEST;
       throw e;
     }
 
-    return preconfiguredMessage[0];
-  }
+    return preconfiguredMessage[ 0 ];
+  };
 
-  private objectToMap = (obj: object) => {
+  private objectToMap = ( obj: object ) => {
     let m = new Map<string, string>();
-    for( const [key, value] of Object.entries(obj) ) {
+    for ( const [ key, value ] of Object.entries( obj ) ) {
       m.set( '${' + key + '}', value.toString() );
     }
     return m;
-  }
-} 
+  };
+}

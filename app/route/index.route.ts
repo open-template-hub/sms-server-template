@@ -10,7 +10,6 @@ import { Environment } from '../../environment';
 import { SmsQueueConsumer } from '../consumer/sms-queue.consumer';
 import { router as smsRouter } from './sms.route';
 import { router as monitorRouter } from './monitor.route';
-import { SmsController } from '../controller/sms.controller';
 
 const subRoutes = {
   root: '/',
@@ -19,7 +18,7 @@ const subRoutes = {
 };
 
 export namespace Routes {
-  export const mount = (app: any) => {
+  export const mount = ( app: any ) => {
     const envArgs = new Environment().args();
 
     const ctxArgs = {
@@ -33,14 +32,14 @@ export namespace Routes {
 
     const assets = {
       mqChannelTag: envArgs.mqArgs?.smsServerMessageQueueChannel as string,
-      queueConsumer: new SmsQueueConsumer(new SmsController()),
+      queueConsumer: new SmsQueueConsumer(),
       applicationName: 'SmsServer',
     } as MountAssets;
 
-    var routes: Array<Route> = [];
+    const routes: Array<Route> = [];
 
-    routes.push({ name: subRoutes.monitor, router: monitorRouter });
-    routes.push({ name: subRoutes.sms, router: smsRouter });
+    routes.push( { name: subRoutes.monitor, router: monitorRouter } );
+    routes.push( { name: subRoutes.sms, router: smsRouter } );
 
     const routeArgs = { routes } as RouteArgs;
 
@@ -51,6 +50,6 @@ export namespace Routes {
       assets,
     } as MountArgs;
 
-    mountApp(args);
+    mountApp( args );
   };
 }
