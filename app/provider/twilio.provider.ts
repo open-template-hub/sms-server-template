@@ -16,16 +16,15 @@ class TwilioPackage {
 }
 
 export class TwilioService implements SmsService {
-  constructor(private payload: any = null) {}
 
   /**
    * initializes client
    * @param providerConfig provider config
    */
-  async initializeClient(providerConfig: any): Promise<any> {
+  async initializeClient( providerConfig: any ): Promise<any> {
     const Twilio: any = TwilioPackage.getInstance();
 
-    return new Twilio( providerConfig.accountId, providerConfig.authToken )
+    return new Twilio( providerConfig.accountId, providerConfig.authToken );
   }
 
   /**
@@ -33,28 +32,28 @@ export class TwilioService implements SmsService {
    * @param client service client
    * @param sms sms
    */
-  async send( client: any, sms: Sms, payload: any ): Promise<Sms> {
+  async send( client: any, sms: Sms ): Promise<Sms> {
     const response = await client.messages.create( {
       body: sms.message,
       from: sms.from,
       to: sms.to
     } );
 
-    if( response ) {
-      sms.created_time = response.dateCreated
-      sms.status = response.status
-      sms.externalId = response.sid
+    if ( response ) {
+      sms.created_time = response.dateCreated;
+      sms.status = response.status;
+      sms.externalId = response.sid;
     }
 
-    return sms
+    return sms;
   }
 
   /**
-   * get from value 
+   * get from value
    * @param payload any payload
    * @returns string from
    */
-   getFromValue(payload: any): string | undefined {
-      return payload?.twilio?.from
+  getFromValue( payload: any ): string | undefined {
+    return payload?.twilio?.from;
   }
 }
