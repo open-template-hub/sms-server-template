@@ -33,11 +33,11 @@ export namespace Routes {
 
     const assets = {
       mqChannelTag: envArgs.mqArgs?.smsServerMessageQueueChannel as string,
-      queueConsumer: new SmsQueueConsumer(new SmsController()),
+      queueConsumer: new SmsQueueConsumer(),
       applicationName: 'SmsServer',
     } as MountAssets;
 
-    var routes: Array<Route> = [];
+    const routes: Array<Route> = [];
 
     routes.push({ name: subRoutes.monitor, router: monitorRouter });
     routes.push({ name: subRoutes.sms, router: smsRouter });
