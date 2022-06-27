@@ -40,7 +40,6 @@ export class SmsController {
     );
 
     const serviceClient = await this.getServiceClient(
-        mongodb_provider,
         serviceProvider.key,
         serviceProvider.payload
     );
