@@ -1,9 +1,4 @@
-import {
-  ContextArgs,
-  MongoDbProvider,
-  QueueConsumer,
-  SmsActionType,
-} from '@open-template-hub/common';
+import { ContextArgs, MongoDbProvider, QueueConsumer, SmsActionType, } from '@open-template-hub/common';
 import { SmsController } from '../controller/sms.controller';
 import { Sms } from '../interface/sms.interface';
 

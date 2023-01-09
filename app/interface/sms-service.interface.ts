@@ -2,7 +2,7 @@
  * @description holds sms service interface
  */
 
-import { Sms } from "./sms.interface";
+import { Sms } from './sms.interface';
 
 export interface SmsService {
   /**
@@ -20,7 +20,7 @@ export interface SmsService {
 
   /**
    * get from value from payload
-   * @param payload 
+   * @param payload
    */
   getFromValue( payload: any ): string | undefined;
 }

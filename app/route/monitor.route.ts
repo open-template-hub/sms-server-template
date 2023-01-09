@@ -9,6 +9,6 @@ const subRoutes = {
 
 export const router = Router();
 
-router.get(subRoutes.alive, async (_req: Request, res: Response) => {
-  res.status(ResponseCode.OK).send();
-});
+router.get( subRoutes.alive, async ( _req: Request, res: Response ) => {
+  res.status( ResponseCode.OK ).send();
+} );
