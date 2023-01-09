@@ -1,15 +1,8 @@
-import {
-  ContextArgs,
-  MountArgs,
-  MountAssets,
-  Route,
-  RouteArgs,
-  mount as mountApp,
-} from '@open-template-hub/common';
+import { ContextArgs, mount as mountApp, MountArgs, MountAssets, Route, RouteArgs, } from '@open-template-hub/common';
 import { Environment } from '../../environment';
 import { SmsQueueConsumer } from '../consumer/sms-queue.consumer';
-import { router as smsRouter } from './sms.route';
 import { router as monitorRouter } from './monitor.route';
+import { router as smsRouter } from './sms.route';
 
 const subRoutes = {
   root: '/',

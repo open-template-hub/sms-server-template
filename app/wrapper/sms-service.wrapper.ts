@@ -10,8 +10,8 @@ import { TwilioService } from '../provider/twilio.provider';
 export class SmsServiceWrapper implements SmsService {
   smsService: SmsService | undefined;
 
-  constructor(uploadService: SmsServiceEnum) {
-    if (uploadService === SmsServiceEnum.Twilio) {
+  constructor( uploadService: SmsServiceEnum ) {
+    if ( uploadService === SmsServiceEnum.Twilio ) {
       this.smsService = new TwilioService();
     } else {
       this.smsService = undefined;
@@ -22,12 +22,12 @@ export class SmsServiceWrapper implements SmsService {
    * initializes client
    * @param providerConfig provider config
    */
-  initializeClient = async (providerConfig: any): Promise<any> => {
-    if (this.smsService === undefined) {
+  initializeClient = async ( providerConfig: any ): Promise<any> => {
+    if ( this.smsService === undefined ) {
       return null;
     }
 
-    return this.smsService.initializeClient(providerConfig);
+    return this.smsService.initializeClient( providerConfig );
   };
 
   /**
@@ -35,12 +35,12 @@ export class SmsServiceWrapper implements SmsService {
    * @param client client
    * @param file file
    */
-  send = async (client: any, sms: Sms, payload: any): Promise<Sms> => {
-    if (this.smsService === undefined) {
+  send = async ( client: any, sms: Sms, payload: any ): Promise<Sms> => {
+    if ( this.smsService === undefined ) {
       return sms;
     }
 
-    return this.smsService.send(client, sms, payload);
+    return this.smsService.send( client, sms, payload );
   };
 
   getFromValue( payload: any ): string | undefined {
@@ -48,6 +48,6 @@ export class SmsServiceWrapper implements SmsService {
       return undefined;
     }
 
-    return this.smsService.getFromValue(payload);
-  } 
+    return this.smsService.getFromValue( payload );
+  }
 }

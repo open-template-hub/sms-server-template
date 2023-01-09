@@ -10,6 +10,6 @@ Authorization: Bearer token
   "to": "+11111",
   "payload": {
     "username": "mert",
-    "twoFactorCode": "422244",
+    "twoFactorCode": "422244"
   }
 }
