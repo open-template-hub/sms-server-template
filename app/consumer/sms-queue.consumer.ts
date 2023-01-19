@@ -91,7 +91,7 @@ export class SmsQueueConsumer implements QueueConsumer {
         e
       );
 
-      this.channel.nack(msg, false, requeue);
+      await this.moveToDLQ(msg, requeue);
     }
   };
 
